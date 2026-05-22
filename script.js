@@ -1,40 +1,317 @@
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
-}
-
-html,
-body{
-
-  width:100%;
-  height:100%;
-
-  overflow:hidden;
-
-  background:#ffcb5c;
-}
+const pages =
+document.querySelectorAll(".page");
 
 /* PAGE */
 
-.page{
+function showPage(id){
 
-  width:100%;
-  height:100vh;
+  pages.forEach(page => {
+    page.classList.remove("active");
+  });
 
-  display:none;
-
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-
-  position:absolute;
-
-  overflow:hidden;
+  document
+  .getElementById(id)
+  .classList.add("active");
 }
 
-.page.active{
+/* SETTINGS */
+
+const settingsBtn =
+document.getElementById("settingsBtn");
+
+const settingsPanel =
+document.getElementById("settingsPanel");
+
+settingsBtn.addEventListener("click", () => {
+
+  settingsPanel.classList.toggle("active");
+
+});
+
+/* FULLSCREEN */
+
+document
+.getElementById("fullscreenBtn")
+.addEventListener("click", () => {
+
+  if(!document.fullscreenElement){
+
+    document.documentElement.requestFullscreen();
+
+  }
+
+  else{
+
+    document.exitFullscreen();
+
+  }
+
+});
+
+/* START */
+
+document
+.getElementById("startBtn")
+.addEventListener("click", () => {
+
+  showPage("templatePage");
+
+});
+
+/* COVER UPLOAD */
+
+document
+.getElementById("coverUpload")
+.addEventListener("change", e => {
+
+  const file =
+  e.target.files[0];
+
+  const url =
+  URL.createObjectURL(file);
+
+  document
+  .getElementById("cover")
+  .style.background =
+  `url(${url}) center/cover`;
+
+});
+
+/* ADD TEMPLATE */
+
+document
+.getElementById("templateUpload")
+.addEventListener("change", e => {
+
+  const file =
+  e.target.files[0];
+
+  const url =
+  URL.createObjectURL(file);
+
+  const card =
+  document.createElement("div");
+
+  card.className =
+  "template-card";
+
+  card.innerHTML = `
+    <img src="${url}">
+    <h3>Custom</h3>
+    <span>Custom Frame</span>
+  `;
+
+  document
+  .getElementById("templatesContainer")
+  .appendChild(card);
+
+});
+
+/* ADD STICKER */
+
+document
+.getElementById("stickerUpload")
+.addEventListener("change", e => {
+
+  const file =
+  e.target.files[0];
+
+  const url =
+  URL.createObjectURL(file);
+
+  const sticker =
+  document.createElement("img");
+
+  sticker.src = url;
+
+  sticker.className =
+  "sticker";
+
+  document
+  .getElementById("stickersContainer")
+  .appendChild(sticker);
+
+});
+
+/* TEMPLATE CLICK */
+
+document.addEventListener("click", e => {
+
+  if(
+    e.target.closest(".template-card")
+  ){
+
+    startCamera();
+
+    showPage("cameraPage");
+
+  }
+
+});
+
+/* CAMERA */
+
+const video =
+document.getElementById("video");
+
+async function startCamera(){
+
+  const stream =
+  await navigator.mediaDevices.getUserMedia({
+    video:true
+  });
+
+  video.srcObject = stream;
+}
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+canvas.width = 350;
+canvas.height = 500;
+
+/* CAPTURE */
+
+document
+.getElementById("captureBtn")
+.addEventListener("click", () => {
+
+  ctx.drawImage(
+    video,
+    0,
+    0,
+    350,
+    500
+  );
+
+  showPage("editPage");
+
+});
+
+/* FILTER */
+
+document
+.querySelectorAll(".filters button")
+.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    canvas.style.filter =
+    button.dataset.filter;
+
+  });
+
+});
+
+/* STICKER */
+
+document.addEventListener("click", e => {
+
+  if(
+    e.target.classList.contains("sticker")
+  ){
+
+    const img =
+    new Image();
+
+    img.src =
+    e.target.src;
+
+    img.onload = () => {
+
+      ctx.drawImage(
+        img,
+        250,
+        20,
+        80,
+        80
+      );
+
+    };
+
+  }
+
+});
+
+/* NEXT */
+
+document
+.getElementById("nextBtn")
+.addEventListener("click", () => {
+
+  generateReceipt();
+
+  showPage("resultPage");
+
+});
+
+/* FINAL */
+
+const finalCanvas =
+document.getElementById("finalCanvas");
+
+const finalCtx =
+finalCanvas.getContext("2d");
+
+finalCanvas.width = 400;
+finalCanvas.height = 700;
+
+function generateReceipt(){
+
+  finalCtx.fillStyle = "white";
+
+  finalCtx.fillRect(
+    0,
+    0,
+    400,
+    700
+  );
+
+  finalCtx.fillStyle = "black";
+
+  finalCtx.font =
+  "bold 30px Arial";
+
+  finalCtx.fillText(
+    "MEMOTIX",
+    120,
+    50
+  );
+
+  finalCtx.drawImage(
+    canvas,
+    25,
+    100,
+    350,
+    500
+  );
+
+  const imageURL =
+  finalCanvas.toDataURL();
+
+  document
+  .getElementById("downloadBtn")
+  .href = imageURL;
+
+  document
+  .getElementById("qrcode")
+  .innerHTML = "";
+
+  new QRCode(
+
+    document.getElementById("qrcode"),
+
+    {
+      text:imageURL,
+      width:150,
+      height:150
+    }
+
+  );
+}.page.active{
   display:flex;
 }
 
