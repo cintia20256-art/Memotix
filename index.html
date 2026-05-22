@@ -1,18 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>memotix photobooth</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
-  <link rel="stylesheet" href="style.css"/>
+  <title>memotix receipt photobooth</title>
+
+  <link rel="stylesheet" href="style.css" />
 
   <!-- QR CODE -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
 
 <body>
+
+  <!-- FULLSCREEN -->
+
+  <button id="fullscreenBtn">
+    ⛶
+  </button>
 
   <!-- =========================
        COVER PAGE
@@ -20,11 +33,34 @@
 
   <section id="cover" class="page active">
 
-    <img src="assets/cover.jpg" class="cover-image"/>
+    <!-- GRID -->
 
-    <div class="overlay">
+    <div class="grid-bg"></div>
 
-      <h1>memotix</h1>
+    <!-- PAPER -->
+
+    <div class="paper-top"></div>
+
+    <div class="paper-bottom"></div>
+
+    <!-- CAMERA -->
+
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png"
+      class="camera-icon"
+    />
+
+    <!-- CONTENT -->
+
+    <div class="cover-content">
+
+      <p class="small-title">
+        RECEIPT
+      </p>
+
+      <h1>
+        PHOTOBOOTH
+      </h1>
 
       <button id="startBtn">
         START
@@ -40,28 +76,139 @@
 
   <section id="templatePage" class="page">
 
-    <h2>Select Your Receipt Template</h2>
+    <div class="template-header">
+
+      <h2>
+        Pilih Frame Foto
+      </h2>
+
+      <p>
+        Pilih desain frame yang kamu sukai untuk memulai
+      </p>
+
+    </div>
 
     <div class="templates">
 
-      <div class="template-card" data-shots="1">
-        <img src="assets/templates/temp1.png"/>
+      <!-- TEMPLATE 1 -->
+
+      <div
+        class="template-card"
+        data-shots="1"
+      >
+
+        <img
+          src="assets/templates/temp1.png"
+        />
+
+        <h3>1 Foto</h3>
+
+        <span>1 Pose</span>
+
       </div>
 
-      <div class="template-card" data-shots="2">
-        <img src="assets/templates/temp2.png"/>
+      <!-- TEMPLATE 2 -->
+
+      <div
+        class="template-card"
+        data-shots="2"
+      >
+
+        <img
+          src="assets/templates/temp2.png"
+        />
+
+        <h3>2 Foto</h3>
+
+        <span>2 Pose</span>
+
       </div>
 
-      <div class="template-card" data-shots="3">
-        <img src="assets/templates/temp3.png"/>
+      <!-- TEMPLATE 3 -->
+
+      <div
+        class="template-card"
+        data-shots="2"
+      >
+
+        <img
+          src="assets/templates/temp3.png"
+        />
+
+        <h3>2R 2 Shot</h3>
+
+        <span>2 Pose</span>
+
       </div>
 
-      <div class="template-card" data-shots="4">
-        <img src="assets/templates/temp4.png"/>
+      <!-- TEMPLATE 4 -->
+
+      <div
+        class="template-card"
+        data-shots="3"
+      >
+
+        <img
+          src="assets/templates/temp4.png"
+        />
+
+        <h3>2R 3 Shot</h3>
+
+        <span>3 Pose</span>
+
       </div>
 
-      <div class="template-card" data-shots="2">
-        <img src="assets/templates/temp5.png"/>
+      <!-- TEMPLATE 5 -->
+
+      <div
+        class="template-card"
+        data-shots="1"
+      >
+
+        <img
+          src="assets/templates/temp5.png"
+        />
+
+        <h3>2R One Shot</h3>
+
+        <span>1 Pose</span>
+
+      </div>
+
+      <!-- TEMPLATE 6 -->
+
+      <div
+        class="template-card"
+        data-shots="6"
+      >
+
+        <img
+          src="assets/templates/temp6.png"
+        />
+
+        <h3>Twin</h3>
+
+        <span>3 Pose</span>
+
+      </div>
+
+      <!-- TEMPLATE 7 -->
+
+      <div
+        class="template-card"
+        data-shots="1"
+      >
+
+        <div class="empty-frame">
+
+          🖼️
+
+        </div>
+
+        <h3>Tanpa Frame</h3>
+
+        <span>Layout Polos</span>
+
       </div>
 
     </div>
@@ -74,9 +221,15 @@
 
   <section id="cameraPage" class="page">
 
-    <h2>Take Your Photo</h2>
+    <h2>
+      Take Your Photo
+    </h2>
 
-    <video id="video" autoplay playsinline></video>
+    <video
+      id="video"
+      autoplay
+      playsinline
+    ></video>
 
     <button id="captureBtn">
       Capture
@@ -90,11 +243,14 @@
 
   <section id="editPage" class="page">
 
-    <h2>Edit Your Photo</h2>
+    <h2>
+      Edit Your Photo
+    </h2>
 
     <canvas id="canvas"></canvas>
 
-    <!-- FILTER -->
+    <!-- FILTERS -->
+
     <div class="filters">
 
       <button data-filter="none">
@@ -116,15 +272,28 @@
     </div>
 
     <!-- STICKERS -->
+
     <div class="stickers">
 
-      <img src="assets/stickers/star.png" class="sticker"/>
+      <img
+        src="assets/stickers/star.png"
+        class="sticker"
+      />
 
-      <img src="assets/stickers/heart.png" class="sticker"/>
+      <img
+        src="assets/stickers/heart.png"
+        class="sticker"
+      />
 
-      <img src="assets/stickers/y2k.png" class="sticker"/>
+      <img
+        src="assets/stickers/y2k.png"
+        class="sticker"
+      />
 
-      <img src="assets/stickers/smile.png" class="sticker"/>
+      <img
+        src="assets/stickers/smile.png"
+        class="sticker"
+      />
 
     </div>
 
@@ -140,11 +309,16 @@
 
   <section id="resultPage" class="page">
 
-    <h2>Your Receipt Photo</h2>
+    <h2>
+      Your Receipt
+    </h2>
 
     <canvas id="finalCanvas"></canvas>
 
-    <a id="downloadBtn" download="memotix-photo.png">
+    <a
+      id="downloadBtn"
+      download="memotix-photo.png"
+    >
       Download Photo
     </a>
 
@@ -155,4 +329,4 @@
   <script src="script.js"></script>
 
 </body>
-        </html>
+</html>
