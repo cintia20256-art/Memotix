@@ -3,7 +3,7 @@
 
 <head>
 
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
 
   <meta
     name="viewport"
@@ -12,7 +12,7 @@
 
   <title>memotix receipt photobooth</title>
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css"/>
 
   <!-- QR CODE -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -20,6 +20,74 @@
 </head>
 
 <body>
+
+  <!-- =========================
+       SETTINGS BUTTON
+  ========================== -->
+
+  <button id="settingsBtn">
+    ⚙️
+  </button>
+
+  <!-- =========================
+       SETTINGS PANEL
+  ========================== -->
+
+  <div id="settingsPanel">
+
+    <h2>
+      Settings
+    </h2>
+
+    <!-- COVER IMAGE -->
+
+    <div class="setting-group">
+
+      <label>
+        Upload Cover Background
+      </label>
+
+      <input
+        type="file"
+        id="coverUpload"
+        accept="image/*"
+      />
+
+    </div>
+
+    <!-- TEMPLATE -->
+
+    <div class="setting-group">
+
+      <label>
+        Add Template Frame
+      </label>
+
+      <input
+        type="file"
+        id="templateUpload"
+        accept="image/*"
+      />
+
+    </div>
+
+    <!-- STICKER -->
+
+    <div class="setting-group">
+
+      <label>
+        Add Sticker
+      </label>
+
+      <input
+        type="file"
+        id="stickerUpload"
+        accept="image/*"
+      />
+
+    </div>
+
+  </div>
 
   <!-- FULLSCREEN -->
 
@@ -33,24 +101,16 @@
 
   <section id="cover" class="page active">
 
-    <!-- GRID -->
-
     <div class="grid-bg"></div>
-
-    <!-- PAPER -->
 
     <div class="paper-top"></div>
 
     <div class="paper-bottom"></div>
 
-    <!-- CAMERA -->
-
     <img
       src="https://cdn-icons-png.flaticon.com/512/2920/2920244.png"
       class="camera-icon"
     />
-
-    <!-- CONTENT -->
 
     <div class="cover-content">
 
@@ -78,6 +138,145 @@
 
     <div class="template-header">
 
+      <h2>
+        Pilih Frame Foto
+      </h2>
+
+      <p>
+        Pilih desain frame yang kamu sukai
+      </p>
+
+    </div>
+
+    <div
+      class="templates"
+      id="templatesContainer"
+    >
+
+      <!-- DEFAULT TEMPLATE -->
+
+      <div
+        class="template-card"
+        data-shots="1"
+      >
+
+        <img
+          src="assets/templates/temp1.png"
+        />
+
+        <h3>1 Foto</h3>
+
+        <span>1 Pose</span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       CAMERA PAGE
+  ========================== -->
+
+  <section id="cameraPage" class="page">
+
+    <h2>
+      Take Your Photo
+    </h2>
+
+    <video
+      id="video"
+      autoplay
+      playsinline
+    ></video>
+
+    <button id="captureBtn">
+      Capture
+    </button>
+
+  </section>
+
+  <!-- =========================
+       EDIT PAGE
+  ========================== -->
+
+  <section id="editPage" class="page">
+
+    <h2>
+      Edit Your Photo
+    </h2>
+
+    <canvas id="canvas"></canvas>
+
+    <!-- FILTER -->
+
+    <div class="filters">
+
+      <button data-filter="none">
+        Normal
+      </button>
+
+      <button data-filter="grayscale(1)">
+        Noir
+      </button>
+
+      <button data-filter="sepia(0.8)">
+        Warm
+      </button>
+
+      <button data-filter="contrast(1.4)">
+        Dark
+      </button>
+
+    </div>
+
+    <!-- STICKERS -->
+
+    <div
+      class="stickers"
+      id="stickersContainer"
+    >
+
+      <img
+        src="assets/stickers/star.png"
+        class="sticker"
+      />
+
+    </div>
+
+    <button id="nextBtn">
+      Next Step
+    </button>
+
+  </section>
+
+  <!-- =========================
+       RESULT PAGE
+  ========================== -->
+
+  <section id="resultPage" class="page">
+
+    <h2>
+      Your Receipt
+    </h2>
+
+    <canvas id="finalCanvas"></canvas>
+
+    <a
+      id="downloadBtn"
+      download="memotix-photo.png"
+    >
+      Download Photo
+    </a>
+
+    <div id="qrcode"></div>
+
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
       <h2>
         Pilih Frame Foto
       </h2>
