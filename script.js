@@ -1,189 +1,149 @@
-const pages = document.querySelectorAll(".page");
-
-function showPage(id){
-
-  pages.forEach(page => {
-    page.classList.remove("active");
-  });
-
-  document.getElementById(id)
-  .classList.add("active");
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
 }
 
-/* =========================
-   START BUTTON
-========================= */
-
-document.getElementById("startBtn")
-.addEventListener("click", () => {
-
-  showPage("templatePage");
-
-});
-
-/* =========================
-   TEMPLATE SELECT
-========================= */
-
-let selectedShots = 1;
-
-document.querySelectorAll(".template-card")
-.forEach(card => {
-
-  card.addEventListener("click", () => {
-
-    selectedShots = card.dataset.shots;
-
-    startCamera();
-
-    showPage("cameraPage");
-
-  });
-
-});
-
-/* =========================
-   CAMERA
-========================= */
-
-const video = document.getElementById("video");
-
-async function startCamera(){
-
-  const stream =
-  await navigator.mediaDevices.getUserMedia({
-    video:true
-  });
-
-  video.srcObject = stream;
+body{
+  background:#f6f1eb;
+  color:#222;
+  overflow:hidden;
 }
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+.page{
+  width:100%;
+  height:100vh;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  gap:20px;
+}
 
-canvas.width = 350;
-canvas.height = 500;
+.page.active{
+  display:flex;
+}
 
-document.getElementById("captureBtn")
-.addEventListener("click", () => {
+/* COVER */
 
-  ctx.drawImage(video,0,0,350,500);
+.cover-image{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  animation:fade 5s infinite alternate;
+}
 
-  showPage("editPage");
+@keyframes fade{
+  from{
+    opacity:0.7;
+  }
+  to{
+    opacity:1;
+  }
+}
 
-});
+.overlay{
+  z-index:2;
+  text-align:center;
+}
 
-/* =========================
-   FILTERS
-========================= */
+.overlay h1{
+  font-size:5rem;
+  color:white;
+  letter-spacing:5px;
+}
 
-document.querySelectorAll(".filters button")
-.forEach(button => {
+#startBtn{
+  margin-top:20px;
+  padding:15px 40px;
+  border:none;
+  border-radius:50px;
+  font-size:1.2rem;
+  cursor:pointer;
 
-  button.addEventListener("click", () => {
+  animation:bounce 1s infinite;
+}
 
-    canvas.style.filter =
-    button.dataset.filter;
+@keyframes bounce{
+  0%{
+    transform:translateY(0);
+  }
 
-  });
+  50%{
+    transform:translateY(-10px);
+  }
 
-});
+  100%{
+    transform:translateY(0);
+  }
+}
 
-/* =========================
-   STICKERS
-========================= */
+/* TEMPLATE */
 
-document.querySelectorAll(".sticker")
-.forEach(sticker => {
+.templates{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  padding:20px;
+}
 
-  sticker.addEventListener("click", () => {
+.template-card{
+  width:180px;
+  background:white;
+  border-radius:20px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:0.3s;
+}
 
-    const img = new Image();
+.template-card:hover{
+  transform:scale(1.05);
+}
 
-    img.src = sticker.src;
+.template-card img{
+  width:100%;
+}
 
-    img.onload = () => {
+/* CAMERA */
 
-      ctx.drawImage(img,250,20,80,80);
+video{
+  width:350px;
+  border-radius:20px;
+}
 
-    };
+/* EDIT */
 
-  });
+canvas{
+  width:350px;
+  background:white;
+  border-radius:20px;
+}
 
-});
+.filters,
+.stickers{
+  display:flex;
+  gap:10px;
+}
 
-/* =========================
-   NEXT STEP
-========================= */
+.filters button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+}
 
-document.getElementById("nextBtn")
-.addEventListener("click", () => {
+.sticker{
+  width:60px;
+  cursor:pointer;
+}
 
-  generateReceipt();
+/* RESULT */
 
-  showPage("resultPage");
-
-});
-
-/* =========================
-   FINAL RECEIPT
-========================= */
-
-const finalCanvas =
-document.getElementById("finalCanvas");
-
-const finalCtx =
-finalCanvas.getContext("2d");
-
-finalCanvas.width = 400;
-finalCanvas.height = 700;
-
-function generateReceipt(){
-
-  finalCtx.fillStyle = "white";
-  finalCtx.fillRect(0,0,400,700);
-
-  finalCtx.fillStyle = "black";
-
-  finalCtx.font = "30px monospace";
-
-  finalCtx.fillText(
-    "MEMOTIX",
-    120,
-    50
-  );
-
-  finalCtx.drawImage(
-    canvas,
-    25,
-    100,
-    350,
-    500
-  );
-
-  finalCtx.font = "18px monospace";
-
-  finalCtx.fillText(
-    "thank you for memories",
-    65,
-    650
-  );
-
-  const imageURL =
-  finalCanvas.toDataURL();
-
-  document.getElementById("downloadBtn")
-  .href = imageURL;
-
-  document.getElementById("qrcode")
-  .innerHTML = "";
-
-  new QRCode(
-    document.getElementById("qrcode"),
-    {
-      text:imageURL,
-      width:150,
-      height:150
-    }
-  );
+#downloadBtn{
+  padding:15px 30px;
+  background:black;
+  color:white;
+  border-radius:20px;
+  text-decoration:none;
 }
