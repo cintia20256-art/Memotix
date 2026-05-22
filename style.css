@@ -1,40 +1,154 @@
-/* =========================
-   MEMOTIX
-========================= */
+const pages = document.querySelectorAll(".page");
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial;
+function showPage(id){
+  pages.forEach(page => {
+    page.classList.remove("active");
+  });
+
+  document.getElementById(id).classList.add("active");
 }
 
-body{
-  overflow:hidden;
-  background:#fff3e0;
-  color:#222;
+/* START */
+
+document.getElementById("startBtn")
+.addEventListener("click", () => {
+  showPage("templatePage");
+});
+
+
+
+/* TEMPLATE */
+
+let selectedShots = 1;
+
+document.querySelectorAll(".template-card")
+.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    selectedShots = card.dataset.shots;
+
+    startCamera();
+
+    showPage("cameraPage");
+  });
+
+});
+
+
+/* CAMERA */
+
+const video = document.getElementById("video");
+
+async function startCamera(){
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video:true
+  });
+
+  video.srcObject = stream;
 }
 
-.page{
-  width:100%;
-  height:100vh;
+const captureBtn = document.getElementById("captureBtn");
 
-  display:none;
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
+canvas.width = 350;
+canvas.height = 500;
 
-  position:relative;
-}
+let captured = false;
 
-.page.active{
-  display:flex;
-}
+captureBtn.addEventListener("click", () => {
 
-/* =========================
-   COVER PAGE
-========================= */
+  ctx.drawImage(video,0,0,350,500);
+
+  captured = true;
+
+  showPage("editPage");
+});
+
+
+/* FILTER */
+
+document.querySelectorAll(".filters button")
+.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    canvas.style.filter = button.dataset.filter;
+  });
+
+});
+
+
+/* STICKERS */
+
+document.querySelectorAll(".sticker")
+.forEach(sticker => {
+
+  sticker.addEventListener("click", () => {
+
+    const img = new Image();
+
+    img.src = sticker.src;
+
+    img.onload = () => {
+
+      ctx.drawImage(img,250,20,80,80);
+    };
+  });
+
+});
+
+
+/* NEXT */
+
+document.getElementById("nextBtn")
+.addEventListener("click", () => {
+
+  generateFinal();
+
+  showPage("resultPage");
+});
+
+
+/* FINAL */
+
+const finalCanvas = document.getElementById("finalCanvas");
+const finalCtx = finalCanvas.getContext("2d");
+
+finalCanvas.width = 400;
+finalCanvas.height = 700;
+
+function generateFinal(){
+
+  finalCtx.fillStyle = "white";
+  finalCtx.fillRect(0,0,400,700);
+
+  finalCtx.fillStyle = "black";
+
+  finalCtx.font = "30px monospace";
+  finalCtx.fillText("MEMOTIX",120,50);
+
+  finalCtx.drawImage(canvas,25,100,350,500);
+
+  finalCtx.font = "18px monospace";
+  finalCtx.fillText("thank you for memories",70,650);
+
+  const imageURL = finalCanvas.toDataURL();
+
+  document.getElementById("downloadBtn")
+  .href = imageURL;
+
+  document.getElementById("qrcode").innerHTML = "";
+
+  new QRCode(document.getElementById("qrcode"),{
+    text:imageURL,
+    width:150,
+    height:150
+  });
+}========================= */
 
 .cover-image{
   position:absolute;
