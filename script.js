@@ -22,124 +22,51 @@ document.getElementById("settingsBtn");
 const settingsPanel =
 document.getElementById("settingsPanel");
 
-settingsBtn.addEventListener("click", () => {
+settingsBtn.onclick = () => {
 
   settingsPanel.classList.toggle("active");
 
-});
+};
 
 /* FULLSCREEN */
 
 document
 .getElementById("fullscreenBtn")
-.addEventListener("click", () => {
+.onclick = () => {
 
   if(!document.fullscreenElement){
 
     document.documentElement.requestFullscreen();
 
-  }
-
-  else{
+  }else{
 
     document.exitFullscreen();
 
   }
 
-});
+};
 
-/* START */
+/* START BUTTON FIX */
 
-document
-.getElementById("startBtn")
-.addEventListener("click", () => {
+const startBtn =
+document.getElementById("startBtn");
+
+startBtn.onclick = () => {
+
+  console.log("START CLICKED");
 
   showPage("templatePage");
 
-});
+};
 
-/* COVER UPLOAD */
-
-document
-.getElementById("coverUpload")
-.addEventListener("change", e => {
-
-  const file =
-  e.target.files[0];
-
-  const url =
-  URL.createObjectURL(file);
-
-  document
-  .getElementById("cover")
-  .style.background =
-  `url(${url}) center/cover`;
-
-});
-
-/* ADD TEMPLATE */
-
-document
-.getElementById("templateUpload")
-.addEventListener("change", e => {
-
-  const file =
-  e.target.files[0];
-
-  const url =
-  URL.createObjectURL(file);
-
-  const card =
-  document.createElement("div");
-
-  card.className =
-  "template-card";
-
-  card.innerHTML = `
-    <img src="${url}">
-    <h3>Custom</h3>
-    <span>Custom Frame</span>
-  `;
-
-  document
-  .getElementById("templatesContainer")
-  .appendChild(card);
-
-});
-
-/* ADD STICKER */
-
-document
-.getElementById("stickerUpload")
-.addEventListener("change", e => {
-
-  const file =
-  e.target.files[0];
-
-  const url =
-  URL.createObjectURL(file);
-
-  const sticker =
-  document.createElement("img");
-
-  sticker.src = url;
-
-  sticker.className =
-  "sticker";
-
-  document
-  .getElementById("stickersContainer")
-  .appendChild(sticker);
-
-});
-
-/* TEMPLATE CLICK */
+/* TEMPLATE */
 
 document.addEventListener("click", e => {
 
-  if(
-    e.target.closest(".template-card")
-  ){
+  const card =
+  e.target.closest(".template-card");
+
+  if(card){
 
     startCamera();
 
@@ -156,13 +83,28 @@ document.getElementById("video");
 
 async function startCamera(){
 
-  const stream =
-  await navigator.mediaDevices.getUserMedia({
-    video:true
-  });
+  try{
 
-  video.srcObject = stream;
+    const stream =
+    await navigator.mediaDevices.getUserMedia({
+      video:true
+    });
+
+    video.srcObject = stream;
+
+  }
+
+  catch(error){
+
+    alert(
+      "Camera permission denied"
+    );
+
+  }
+
 }
+
+/* CAPTURE */
 
 const canvas =
 document.getElementById("canvas");
@@ -173,11 +115,9 @@ canvas.getContext("2d");
 canvas.width = 350;
 canvas.height = 500;
 
-/* CAPTURE */
-
 document
 .getElementById("captureBtn")
-.addEventListener("click", () => {
+.onclick = () => {
 
   ctx.drawImage(
     video,
@@ -189,7 +129,7 @@ document
 
   showPage("editPage");
 
-});
+};
 
 /* FILTER */
 
@@ -197,12 +137,12 @@ document
 .querySelectorAll(".filters button")
 .forEach(button => {
 
-  button.addEventListener("click", () => {
+  button.onclick = () => {
 
     canvas.style.filter =
     button.dataset.filter;
 
-  });
+  };
 
 });
 
@@ -240,13 +180,13 @@ document.addEventListener("click", e => {
 
 document
 .getElementById("nextBtn")
-.addEventListener("click", () => {
+.onclick = () => {
 
   generateReceipt();
 
   showPage("resultPage");
 
-});
+};
 
 /* FINAL */
 
@@ -273,20 +213,29 @@ function generateReceipt(){
   finalCtx.fillStyle = "black";
 
   finalCtx.font =
-  "bold 30px Arial";
+  "bold 32px Arial";
 
   finalCtx.fillText(
     "MEMOTIX",
-    120,
-    50
+    115,
+    60
   );
 
   finalCtx.drawImage(
     canvas,
     25,
-    100,
+    110,
     350,
     500
+  );
+
+  finalCtx.font =
+  "18px Arial";
+
+  finalCtx.fillText(
+    "thank you for memories",
+    70,
+    660
   );
 
   const imageURL =
@@ -311,476 +260,85 @@ function generateReceipt(){
     }
 
   );
-}.page.active{
-  display:flex;
+
 }
 
-/* SETTINGS */
+/* COVER BACKGROUND */
 
-#settingsBtn{
+document
+.getElementById("coverUpload")
+.onchange = e => {
 
-  position:fixed;
+  const file =
+  e.target.files[0];
 
-  top:15px;
-  left:15px;
+  if(!file) return;
 
-  z-index:9999;
+  const url =
+  URL.createObjectURL(file);
 
-  width:50px;
-  height:50px;
+  document
+  .getElementById("cover")
+  .style.background =
+  `url(${url}) center/cover`;
 
-  border:none;
+};
 
-  border-radius:50%;
+/* ADD TEMPLATE */
 
-  background:white;
+document
+.getElementById("templateUpload")
+.onchange = e => {
 
-  cursor:pointer;
+  const file =
+  e.target.files[0];
 
-  font-size:1.2rem;
-}
+  if(!file) return;
 
-#settingsPanel{
+  const url =
+  URL.createObjectURL(file);
 
-  position:fixed;
+  const card =
+  document.createElement("div");
 
-  top:0;
-  left:-100%;
+  card.className =
+  "template-card";
 
-  width:300px;
-  height:100%;
+  card.innerHTML = `
+    <img src="${url}">
+    <p>Custom</p>
+  `;
 
-  background:white;
+  document
+  .getElementById("templatesContainer")
+  .appendChild(card);
 
-  z-index:99999;
+};
 
-  padding:30px;
+/* ADD STICKER */
 
-  transition:0.4s;
+document
+.getElementById("stickerUpload")
+.onchange = e => {
 
-  overflow:auto;
-}
+  const file =
+  e.target.files[0];
 
-#settingsPanel.active{
-  left:0;
-}
+  if(!file) return;
 
-.setting-group{
+  const url =
+  URL.createObjectURL(file);
 
-  margin-top:25px;
-}
+  const sticker =
+  document.createElement("img");
 
-.setting-group label{
+  sticker.src = url;
 
-  display:block;
+  sticker.className =
+  "sticker";
 
-  margin-bottom:10px;
+  document
+  .getElementById("stickersContainer")
+  .appendChild(sticker);
 
-  font-weight:bold;
-}
-
-/* FULLSCREEN */
-
-#fullscreenBtn{
-
-  position:fixed;
-
-  top:15px;
-  right:15px;
-
-  z-index:9999;
-
-  width:50px;
-  height:50px;
-
-  border:none;
-
-  border-radius:50%;
-
-  background:white;
-
-  cursor:pointer;
-}
-
-/* COVER */
-
-#cover{
-
-  background:
-  linear-gradient(
-    180deg,
-    #ffd56f,
-    #ffb42e
-  );
-}
-
-.grid-bg{
-
-  position:absolute;
-
-  width:100%;
-  height:100%;
-
-  background-image:
-  linear-gradient(
-    rgba(0,0,0,0.08) 1px,
-    transparent 1px
-  ),
-  linear-gradient(
-    90deg,
-    rgba(0,0,0,0.08) 1px,
-    transparent 1px
-  );
-
-  background-size:35px 35px;
-
-  pointer-events:none;
-}
-
-.paper-top{
-
-  position:absolute;
-
-  top:0;
-
-  width:100%;
-  height:180px;
-
-  background:#f5f1ea;
-
-  pointer-events:none;
-}
-
-.paper-bottom{
-
-  position:absolute;
-
-  bottom:0;
-
-  width:100%;
-  height:240px;
-
-  background:#f5f1ea;
-
-  pointer-events:none;
-}
-
-.camera-icon{
-
-  position:absolute;
-
-  top:110px;
-  left:40px;
-
-  width:90px;
-
-  pointer-events:none;
-}
-
-.cover-content{
-
-  position:relative;
-
-  z-index:1000;
-
-  text-align:center;
-}
-
-.small-title{
-
-  color:white;
-
-  letter-spacing:10px;
-
-  margin-bottom:10px;
-}
-
-.cover-content h1{
-
-  color:white;
-
-  font-size:4rem;
-
-  font-weight:900;
-}
-
-#startBtn{
-
-  margin-top:40px;
-
-  padding:15px 55px;
-
-  border-radius:999px;
-
-  border:none;
-
-  background:white;
-
-  cursor:pointer;
-
-  font-weight:bold;
-}
-
-/* TEMPLATE */
-
-#templatePage{
-  background:#fff7e7;
-}
-
-.template-header{
-  text-align:center;
-  margin-top:40px;
-}
-
-.templates{
-
-  width:100%;
-
-  display:grid;
-
-  grid-template-columns:
-  repeat(2,1fr);
-
-  gap:15px;
-
-  padding:20px;
-
-  overflow:auto;
-}
-
-.template-card{
-
-  background:white;
-
-  border-radius:20px;
-
-  padding:12px;
-
-  text-align:center;
-
-  cursor:pointer;
-}
-
-.template-card img{
-
-  width:100%;
-
-  border-radius:15px;
-}
-
-.template-card span{
-
-  display:inline-block;
-
-  margin-top:8px;
-
-  background:#efe3ff;
-
-  padding:7px 12px;
-
-  border-radius:999px;
-}
-
-/* CAMERA */
-
-video{
-
-  width:320px;
-
-  border-radius:25px;
-}
-
-/* BUTTON */
-
-#captureBtn,
-#nextBtn,
-#downloadBtn{
-
-  margin-top:20px;
-
-  padding:15px 40px;
-
-  border:none;
-
-  border-radius:999px;
-
-  background:#ffb52e;
-
-  color:white;
-
-  cursor:pointer;
-}
-
-/* CANVAS */
-
-canvas{
-
-  width:320px;
-
-  border-radius:20px;
-
-  background:white;
-}
-
-/* FILTERS */
-
-.filters,
-.stickers{
-
-  display:flex;
-
-  gap:10px;
-
-  margin-top:15px;
-
-  flex-wrap:wrap;
-
-  justify-content:center;
-}
-
-.filters button{
-
-  padding:10px 18px;
-
-  border:none;
-
-  border-radius:999px;
-
-  background:#ffb52e;
-
-  color:white;
-
-  cursor:pointer;
-}
-
-.sticker{
-
-  width:60px;
-
-  cursor:pointer;
-}
-
-/* QR */
-
-#qrcode{
-
-  margin-top:20px;
-
-  background:white;
-
-  padding:15px;
-
-  border-radius:20px;
-}
-@keyframes fade{
-  from{
-    opacity:0.7;
-  }
-  to{
-    opacity:1;
-  }
-}
-
-.overlay{
-  z-index:2;
-  text-align:center;
-}
-
-.overlay h1{
-  font-size:5rem;
-  color:white;
-  letter-spacing:5px;
-}
-
-#startBtn{
-  margin-top:20px;
-  padding:15px 40px;
-  border:none;
-  border-radius:50px;
-  font-size:1.2rem;
-  cursor:pointer;
-
-  animation:bounce 1s infinite;
-}
-
-@keyframes bounce{
-  0%{
-    transform:translateY(0);
-  }
-
-  50%{
-    transform:translateY(-10px);
-  }
-
-  100%{
-    transform:translateY(0);
-  }
-}
-
-/* TEMPLATE */
-
-.templates{
-  display:flex;
-  gap:20px;
-  overflow-x:auto;
-  padding:20px;
-}
-
-.template-card{
-  width:180px;
-  background:white;
-  border-radius:20px;
-  overflow:hidden;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.template-card:hover{
-  transform:scale(1.05);
-}
-
-.template-card img{
-  width:100%;
-}
-
-/* CAMERA */
-
-video{
-  width:350px;
-  border-radius:20px;
-}
-
-/* EDIT */
-
-canvas{
-  width:350px;
-  background:white;
-  border-radius:20px;
-}
-
-.filters,
-.stickers{
-  display:flex;
-  gap:10px;
-}
-
-.filters button{
-  padding:10px;
-  border:none;
-  border-radius:10px;
-}
-
-.sticker{
-  width:60px;
-  cursor:pointer;
-}
-
-/* RESULT */
-
-#downloadBtn{
-  padding:15px 30px;
-  background:black;
-  color:white;
-  border-radius:20px;
-  text-decoration:none;
-}
+};
