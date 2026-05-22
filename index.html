@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>memotix photobooth</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- QR CODE -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+  <!-- =========================
+       COVER PAGE
+  ========================== -->
+
+  <section id="cover" class="page active">
+
+    <img src="assets/cover.jpg" class="cover-image"/>
+
+    <div class="overlay">
+
+      <h1>memotix</h1>
+
+      <button id="startBtn">
+        START
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       TEMPLATE PAGE
+  ========================== -->
+
+  <section id="templatePage" class="page">
+
+    <h2>Select Your Receipt Template</h2>
+
+    <div class="templates">
+
+      <div class="template-card" data-shots="1">
+        <img src="assets/templates/temp1.png"/>
+      </div>
+
+      <div class="template-card" data-shots="2">
+        <img src="assets/templates/temp2.png"/>
+      </div>
+
+      <div class="template-card" data-shots="3">
+        <img src="assets/templates/temp3.png"/>
+      </div>
+
+      <div class="template-card" data-shots="4">
+        <img src="assets/templates/temp4.png"/>
+      </div>
+
+      <div class="template-card" data-shots="2">
+        <img src="assets/templates/temp5.png"/>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- =========================
+       CAMERA PAGE
+  ========================== -->
+
+  <section id="cameraPage" class="page">
+
+    <h2>Take Your Photo</h2>
+
+    <video id="video" autoplay playsinline></video>
+
+    <button id="captureBtn">
+      Capture
+    </button>
+
+  </section>
+
+  <!-- =========================
+       EDIT PAGE
+  ========================== -->
+
+  <section id="editPage" class="page">
+
+    <h2>Edit Your Photo</h2>
+
+    <canvas id="canvas"></canvas>
+
+    <!-- FILTER -->
+    <div class="filters">
+
+      <button data-filter="none">
+        Normal
+      </button>
+
+      <button data-filter="grayscale(1)">
+        Noir
+      </button>
+
+      <button data-filter="sepia(0.8)">
+        Warm
+      </button>
+
+      <button data-filter="contrast(1.4)">
+        Dark
+      </button>
+
+    </div>
+
+    <!-- STICKERS -->
+    <div class="stickers">
+
+      <img src="assets/stickers/star.png" class="sticker"/>
+
+      <img src="assets/stickers/heart.png" class="sticker"/>
+
+      <img src="assets/stickers/y2k.png" class="sticker"/>
+
+      <img src="assets/stickers/smile.png" class="sticker"/>
+
+    </div>
+
+    <button id="nextBtn">
+      Next Step
+    </button>
+
+  </section>
+
+  <!-- =========================
+       RESULT PAGE
+  ========================== -->
+
+  <section id="resultPage" class="page">
+
+    <h2>Your Receipt Photo</h2>
+
+    <canvas id="finalCanvas"></canvas>
+
+    <a id="downloadBtn" download="memotix-photo.png">
+      Download Photo
+    </a>
+
+    <div id="qrcode"></div>
+
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+        </html>
